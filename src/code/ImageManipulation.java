@@ -113,32 +113,32 @@ public class ImageManipulation {
         APImage image = new APImage(pathToFile);
         int height = image.getHeight();
         int width = image.getWidth();
+        APImage edgeImage = new APImage(width, height);
         for(int i=0;i<width;i++){
-            for(int j=0;j<height-1;j++){
+            for(int j=0;j<height;j++){
                 Pixel pixel1 = image.getPixel(i,j);
                 int average1 = getAverageColour(pixel1);
-                int a;
-                if(i==0){
-                    a=0;
+                int average2=0;
+                if (i>0){
+                    Pixel pixel2 = image.getPixel(i-1,j);
+                    average2 = getAverageColour(pixel2);
                 }
-                else{
-                    a=i-1;
+                int average3 = 0;
+                if(j<height-1){
+                    Pixel pixel3 = image.getPixel(i,j+1);
+                    average3 = getAverageColour(pixel3);
                 }
-                Pixel pixel2 = image.getPixel(a,j);
-                int average2 = getAverageColour(pixel2);
-                Pixel pixel3 = image.getPixel(i,j+1);
-                int average3 = getAverageColour(pixel3);
                 if(Math.abs(average1-average2)>threshold||Math.abs(average1-average3)>threshold){
                     Pixel black = new Pixel(0,0,0);
-                    image.setPixel(i,j,black);
+                    edgeImage.setPixel(i,j,black);
                 }
                 else{
                     Pixel white = new Pixel(225,225,225);
-                    image.setPixel(i,j,white);
+                    edgeImage.setPixel(i,j,white);
                 }
             }
         }
-        image.draw();
+        edgeImage.draw();
     }
 
     /** CHALLENGE Four: Reflect Image
